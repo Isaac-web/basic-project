@@ -1,5 +1,5 @@
-import { fetchUsers } from '../../lib/api/users';
-import { useQuery } from '@tanstack/react-query';
+import { deleteUser, fetchUsers } from '../../lib/api/users';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { FetchUsersQueryParams } from '../../types';
 
 export const useFetchUsers = ({
@@ -21,5 +21,23 @@ export const useFetchUsers = ({
       itemsPerPage: queryRes.data?.per_page,
       totalNumberOfItems: queryRes.data?.total,
     },
+  };
+};
+
+export const useDeleteUser = () => {
+  const { invalidateQueries } = useQueryClient();
+  const { mutate, ...rest } = useMutation({
+    mutationFn: deleteUser,
+    async onSuccess() {
+      invalidateQueries({ queryKey: ['users'] });
+    },
+    async onError() {
+      console.log('Something went wrong.');
+    },
+  });
+
+  return {
+    ...rest,
+    deleteUser: mutate,
   };
 };

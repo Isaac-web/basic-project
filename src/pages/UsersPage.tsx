@@ -6,6 +6,8 @@ import {
   type TableColumn,
 } from '../components/table';
 import { usePaginationParams } from '../hooks/use-pagination-params';
+import { DeleteUserButton } from '../components/DeleteUserButton';
+import { Link } from 'react-router';
 
 const columns: TableColumn<User>[] = [
   { label: 'First Name', accessor: 'first_name' },
@@ -18,6 +20,13 @@ const columns: TableColumn<User>[] = [
     },
   },
   { label: 'Email', accessor: 'email' },
+  {
+    label: '',
+    accessor: '',
+    element(u) {
+      return <DeleteUserButton user={u} />;
+    },
+  },
 ];
 
 export const UsersPage = () => {
@@ -31,6 +40,15 @@ export const UsersPage = () => {
   return (
     <section>
       <div className="w-full max-w-6xl mx-auto">
+        <div className="flex justify-between items-center py-10">
+          <h3 className="text-3xl font-semibold">Users</h3>
+
+          <Link to="/users/create">
+            <button className="bg-purple-700 text-white px-4 py-2 rounded-sm">
+              Add User
+            </button>
+          </Link>
+        </div>
         {isLoading ? (
           <p className="text-sm text-center py-8">Loading...</p>
         ) : (
