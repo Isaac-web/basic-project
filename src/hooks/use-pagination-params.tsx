@@ -5,8 +5,8 @@ export const usePaginationParams = (
     initialPage,
     initialLimit,
   }: {
-    initialPage: number;
-    initialLimit: number;
+    initialPage?: number;
+    initialLimit?: number;
   } = { initialPage: 1, initialLimit: 10 },
 ) => {
   const [queryParams] = useSearchParams();

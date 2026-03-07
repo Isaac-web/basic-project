@@ -5,7 +5,7 @@ import {
   TablePagination,
   type TableColumn,
 } from '../components/table';
-import { usePaginationParams } from '../hooks/api/use-pagination-params';
+import { usePaginationParams } from '../hooks/use-pagination-params';
 
 const columns: TableColumn<User>[] = [
   { label: 'First Name', accessor: 'first_name' },
@@ -21,7 +21,9 @@ const columns: TableColumn<User>[] = [
 ];
 
 export const UsersPage = () => {
-  const { setParams, currentPage, limit } = usePaginationParams();
+  const { setParams, currentPage, limit } = usePaginationParams({
+    initialLimit: 8,
+  });
   const { users, isLoading, pagination } = useFetchUsers({
     params: { page: currentPage, per_page: limit },
   });
