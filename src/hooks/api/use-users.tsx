@@ -8,9 +8,18 @@ export const useFetchUsers = ({
   params?: FetchUsersQueryParams;
 } = {}) => {
   const queryRes = useQuery({
-    queryKey: ['users'],
+    queryKey: ['users', params],
     queryFn: () => fetchUsers(params),
   });
 
-  return { ...queryRes, users: queryRes.data?.data || [] };
+  return {
+    ...queryRes,
+    users: queryRes.data?.data || [],
+    pagination: {
+      currentPage: queryRes.data?.page,
+      totalPages: queryRes.data?.total_pages,
+      itemsPerPage: queryRes.data?.per_page,
+      totalNumberOfItems: queryRes.data?.total,
+    },
+  };
 };

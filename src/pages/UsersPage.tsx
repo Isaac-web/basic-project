@@ -1,16 +1,11 @@
-import type { ReactNode } from 'react';
 import { useFetchUsers } from '../hooks/api/use-users';
 import type { User } from '../types';
-
-type TableColumn<T extends {}> = {
-  label: string;
-  accessor: string;
-  element?(value: T): ReactNode;
-  nodeProps?: {
-    headerProps?: React.ThHTMLAttributes<HTMLTableHeaderCellElement>;
-    cellProps?: React.TdHTMLAttributes<HTMLTableDataCellElement>;
-  };
-};
+import {
+  AppTable,
+  TablePagination,
+  type TableColumn,
+} from '../components/table';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 
 const columns: TableColumn<User>[] = [
   { label: 'First Name', accessor: 'first_name' },
@@ -26,7 +21,16 @@ const columns: TableColumn<User>[] = [
 ];
 
 export const UsersPage = () => {
-  const { users, isLoading } = useFetchUsers();
+  const [queryParams] = useSearchParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const currentPage = parseInt(queryParams.get('page') as string) || 1;
+  const limit = parseInt(queryParams.get('limit') as string) || 10;
+
+  const { users, isLoading, pagination } = useFetchUsers({
+    params: { page: currentPage, per_page: limit },
+  });
 
   return (
     <section>
@@ -34,31 +38,17 @@ export const UsersPage = () => {
         {isLoading ? (
           <p className="text-sm text-center py-8">Loading...</p>
         ) : (
-          <table className="w-full">
-            <thead>
-              <tr>
-                {columns.map((c) => (
-                  <th className="py-4" align="left">
-                    {c.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {users.map((u) => (
-                <tr>
-                  {columns.map((c) => (
-                    <td className="py-1 border-b border-black/5">
-                      {c.element
-                        ? c.element(u)
-                        : u[c.accessor as keyof typeof u]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <>
+            <AppTable columns={columns} data={users} />
+            <TablePagination
+              currentPage={pagination.currentPage!}
+              totalPages={pagination.totalPages!}
+              onPageChange={(page) => {
+                queryParams.set('page', page.toString());
+                navigate(`${pathname}?${queryParams.toString()}`);
+              }}
+            />
+          </>
         )}
       </div>
     </section>
