@@ -5,7 +5,7 @@ import {
   TablePagination,
   type TableColumn,
 } from '../components/table';
-import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { usePaginationParams } from '../hooks/api/use-pagination-params';
 
 const columns: TableColumn<User>[] = [
   { label: 'First Name', accessor: 'first_name' },
@@ -21,13 +21,7 @@ const columns: TableColumn<User>[] = [
 ];
 
 export const UsersPage = () => {
-  const [queryParams] = useSearchParams();
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-
-  const currentPage = parseInt(queryParams.get('page') as string) || 1;
-  const limit = parseInt(queryParams.get('limit') as string) || 10;
-
+  const { setParams, currentPage, limit } = usePaginationParams();
   const { users, isLoading, pagination } = useFetchUsers({
     params: { page: currentPage, per_page: limit },
   });
@@ -43,10 +37,7 @@ export const UsersPage = () => {
             <TablePagination
               currentPage={pagination.currentPage!}
               totalPages={pagination.totalPages!}
-              onPageChange={(page) => {
-                queryParams.set('page', page.toString());
-                navigate(`${pathname}?${queryParams.toString()}`);
-              }}
+              onPageChange={(page) => setParams({ page })}
             />
           </>
         )}
