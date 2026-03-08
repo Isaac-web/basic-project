@@ -1,5 +1,6 @@
 import { apiClient } from '.';
 import type {
+  CreateUserFormData,
   FetchUsersQueryParams,
   FetchUsersResponse,
   User,
@@ -15,8 +16,14 @@ export const fetchUsers = async (
   return res;
 };
 
+export const createUser = async (data: CreateUserFormData) => {
+  const { data: res } = await apiClient.post<User>(`/users`);
+
+  return res;
+};
+
 export const deleteUser = async (userId: number) => {
-  const { data: res } = await apiClient.delete<User>(`/users/${userId}`);
+  const { data: res } = await apiClient.delete<never>(`/users/${userId}`);
 
   return res;
 };

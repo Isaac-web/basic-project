@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router';
 import { LoginPage } from './pages/AddUserPage';
 import { UsersPage } from './pages/UsersPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient();
 
@@ -13,6 +14,7 @@ function App() {
         <Route path="/users" element={<UsersPage />} />
         <Route index element={<Navigate to={'/users'} />} />
       </Routes>
+      <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
 }

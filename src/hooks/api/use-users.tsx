@@ -1,4 +1,4 @@
-import { deleteUser, fetchUsers } from '../../lib/api/users';
+import { createUser, deleteUser, fetchUsers } from '../../lib/api/users';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { FetchUsersQueryParams } from '../../types';
 
@@ -24,15 +24,48 @@ export const useFetchUsers = ({
   };
 };
 
-export const useDeleteUser = () => {
-  const { invalidateQueries } = useQueryClient();
+export const useCreateUser = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?(): void;
+  onError?(): void;
+} = {}) => {
+  const queryClient = useQueryClient();
+  const { mutate, ...rest } = useMutation({
+    mutationFn: createUser,
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      onSuccess?.();
+    },
+    onError(err) {
+      console.log(err);
+      onError?.();
+    },
+  });
+
+  return {
+    ...rest,
+    createUser: mutate,
+  };
+};
+
+export const useDeleteUser = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?(): void;
+  onError?(): void;
+} = {}) => {
+  const queryClient = useQueryClient();
   const { mutate, ...rest } = useMutation({
     mutationFn: deleteUser,
     async onSuccess() {
-      invalidateQueries({ queryKey: ['users'] });
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      onSuccess?.();
     },
-    async onError() {
-      console.log('Something went wrong.');
+    onError() {
+      onError?.();
     },
   });
 
