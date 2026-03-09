@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 export const AddUserPage = () => {
   const navigate = useNavigate();
 
-  const { createUser, isPending } = useCreateUser({
+  const { createUser } = useCreateUser({
     onSuccess: () => {
       toast.success('User created successfully.');
       navigate('/users');
@@ -34,7 +34,6 @@ export const AddUserPage = () => {
               avatar: value.avatar,
             })
           }
-          isPending={isPending}
         />
       </div>
     </section>
