@@ -1,6 +1,12 @@
-import { createUser, deleteUser, fetchUsers } from '../../lib/api/users';
+import {
+  createUser,
+  deleteUser,
+  fetchUsers,
+  getUserById,
+  updateUser,
+} from '../../lib/api/users';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { FetchUsersQueryParams } from '../../types';
+import type { FetchUsersQueryParams, UpdateUserFormData } from '../../types';
 
 export const useFetchUsers = ({
   params,
@@ -22,6 +28,15 @@ export const useFetchUsers = ({
       totalNumberOfItems: queryRes.data?.total,
     },
   };
+};
+
+export const useGetUserById = ({ userId }: { userId: number }) => {
+  const queryRes = useQuery({
+    queryKey: ['users', userId],
+    queryFn: () => getUserById(userId),
+  });
+
+  return queryRes;
 };
 
 export const useCreateUser = ({
@@ -47,6 +62,34 @@ export const useCreateUser = ({
   return {
     ...rest,
     createUser: mutate,
+  };
+};
+
+export const useUpdateUser = ({
+  userId,
+  onSuccess,
+  onError,
+}: {
+  userId: number;
+  onSuccess?(): void;
+  onError?(): void;
+}) => {
+  const queryClient = useQueryClient();
+  const { mutate, ...rest } = useMutation({
+    mutationFn: (data: UpdateUserFormData) => updateUser(userId, data),
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      onSuccess?.();
+    },
+    onError(err) {
+      console.log(err);
+      onError?.();
+    },
+  });
+
+  return {
+    ...rest,
+    updateUser: mutate,
   };
 };
 

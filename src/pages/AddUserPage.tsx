@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { UserForm } from '../components/UserForm';
 import { useNavigate } from 'react-router';
 
-export const LoginPage = () => {
+export const AddUserPage = () => {
   const navigate = useNavigate();
 
   const { createUser } = useCreateUser({

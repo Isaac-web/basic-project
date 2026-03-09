@@ -8,6 +8,9 @@ import {
 import { usePaginationParams } from '../hooks/use-pagination-params';
 import { DeleteUserButton } from '../components/DeleteUserButton';
 import { Link } from 'react-router';
+import { FetchErrorState } from '../components/FetchErrorState';
+import { RotatingLines } from 'react-loader-spinner';
+import { UpdateUserButton } from '../components/EditUserButton';
 
 const columns: TableColumn<User>[] = [
   { label: 'First Name', accessor: 'first_name' },
@@ -24,7 +27,12 @@ const columns: TableColumn<User>[] = [
     label: '',
     accessor: '',
     element(u) {
-      return <DeleteUserButton user={u} />;
+      return (
+        <div className="flex gap-x-2">
+          <UpdateUserButton user={u} />
+          <DeleteUserButton user={u} />
+        </div>
+      );
     },
   },
 ];
@@ -33,7 +41,7 @@ export const UsersPage = () => {
   const { setParams, currentPage, limit } = usePaginationParams({
     initialLimit: 8,
   });
-  const { users, isLoading, pagination } = useFetchUsers({
+  const { users, isLoading, isError, pagination, refetch } = useFetchUsers({
     params: { page: currentPage, per_page: limit },
   });
 
@@ -50,7 +58,20 @@ export const UsersPage = () => {
           </Link>
         </div>
         {isLoading ? (
-          <p className="text-sm text-center py-8">Loading...</p>
+          <div className="flex gap-5 justify-center items-center py-24">
+            <RotatingLines
+              height="30"
+              width="30"
+              color="oklch(49.6% 0.265 301.924)"
+              ariaLabel="circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+            <p className="text-sm text-center">Loading...</p>
+          </div>
+        ) : isError ? (
+          <FetchErrorState onRetry={() => refetch()} />
         ) : (
           <>
             <AppTable columns={columns} data={users} />

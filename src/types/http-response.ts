@@ -32,3 +32,5 @@ export type PaginatedResponse<T> = {
 };
 
 export type FetchUsersResponse = PaginatedResponse<User>;
+
+export type GetUserByIdResponse = { data: User };

@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { ChevronLeftIcon } from './icons/ChevronLeftIcon';
 import { z } from 'zod';
 import { TextField } from './TextField';
+import { RotatingLines } from 'react-loader-spinner';
 
 const schemaFormSchema = z.object({
   firstName: z.string().min(1, { message: 'Please enter your first name' }),
@@ -20,9 +21,13 @@ type UserFormData = z.infer<typeof schemaFormSchema>;
 
 export const UserForm = ({
   initialFormData,
+  isPending,
+  type = 'create',
   onSubmit,
 }: {
+  type?: 'create' | 'edit';
   initialFormData: UserFormData;
+  isPending?: boolean;
   onSubmit(data: UserFormData): void;
 }) => {
   const form = useForm({
@@ -51,7 +56,9 @@ export const UserForm = ({
             Back to users
           </Link>
 
-          <h3 className="text-3xl font-semibold">Create User</h3>
+          <h3 className="text-3xl font-semibold">
+            {type === 'edit' ? 'Update' : 'Edit'} User
+          </h3>
           <p className="text-sm text-black/60">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Delectus,
             at!
@@ -142,9 +149,21 @@ export const UserForm = ({
           </div>
           <button
             type="submit"
-            className="py-2 mt-5 w-full bg-purple-700 text-white font-semibold col-span-2 rounded-sm"
+            disabled={isPending}
+            className={`py-2 mt-5 w-full bg-purple-700 text-white font-semibold col-span-2 rounded-sm flex gap-2 justify-center items-center disabled:bg-gray-500 text-white ${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
-            Add User
+            {type === 'create' ? 'Update' : 'Add'} User{' '}
+            {isPending && (
+              <RotatingLines
+                height="20"
+                width="20"
+                color="#FFFFFF"
+                ariaLabel="circles-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            )}
           </button>
         </div>
       </form>

@@ -6,3 +6,5 @@ export type FetchUsersQueryParams = {
 };
 
 export type CreateUserFormData = Omit<User, 'id'>;
+
+export type UpdateUserFormData = Partial<Omit<User, 'id'>>;
