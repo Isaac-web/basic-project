@@ -12,7 +12,7 @@ export const DeleteUserButton = ({ user }: { user: User }) => {
       });
     },
     onError() {
-      toast.success('Could not delete action.', {
+      toast.error('Could not complete delete action.', {
         className: 'bg-red-100',
       });
     },

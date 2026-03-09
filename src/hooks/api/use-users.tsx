@@ -53,8 +53,7 @@ export const useCreateUser = ({
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       onSuccess?.();
     },
-    onError(err) {
-      console.log(err);
+    onError() {
       onError?.();
     },
   });
@@ -81,8 +80,7 @@ export const useUpdateUser = ({
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       onSuccess?.();
     },
-    onError(err) {
-      console.log(err);
+    onError() {
       onError?.();
     },
   });
