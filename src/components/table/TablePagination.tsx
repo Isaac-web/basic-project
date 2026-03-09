@@ -6,6 +6,38 @@ interface PaginationProps extends HTMLAttributes<HTMLElement> {
   onPageChange: (page: number) => void;
 }
 
+const getPageNumbers = (
+  currentPage: number,
+  totalPages: number,
+): (number | '...')[] => {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const pages: (number | '...')[] = [];
+
+  pages.push(1);
+
+  if (currentPage > 3) {
+    pages.push('...');
+  }
+
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (currentPage < totalPages - 2) {
+    pages.push('...');
+  }
+
+  pages.push(totalPages);
+
+  return pages;
+};
+
 export const TablePagination = ({
   currentPage,
   totalPages,
@@ -19,6 +51,8 @@ export const TablePagination = ({
     }
   };
 
+  const pageNumbers = getPageNumbers(currentPage, totalPages);
+
   return (
     <nav
       className={`flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6 ${className}`}
@@ -31,18 +65,42 @@ export const TablePagination = ({
           <span className="font-medium">{totalPages}</span>
         </p>
       </div>
-      <div className="flex flex-1 justify-between sm:justify-end gap-x-2">
+      <div className="flex flex-1 justify-between sm:justify-end gap-x-1">
         <button
           onClick={() => handlePageClick(currentPage - 1)}
           disabled={currentPage === 1}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Previous
         </button>
+
+        {pageNumbers.map((page, index) =>
+          page === '...' ? (
+            <span
+              key={`ellipsis-${index}`}
+              className="relative inline-flex items-center px-3 py-2 text-sm text-gray-500"
+            >
+              ...
+            </span>
+          ) : (
+            <button
+              key={page}
+              onClick={() => handlePageClick(page)}
+              className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                page === currentPage
+                  ? 'bg-purple-700 text-white'
+                  : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {page}
+            </button>
+          ),
+        )}
+
         <button
           onClick={() => handlePageClick(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Next
         </button>

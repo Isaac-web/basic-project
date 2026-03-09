@@ -10,7 +10,7 @@ export type TableColumn<T extends {}> = {
   };
 };
 
-export const AppTable = <T extends {}>({
+export const AppTable = <T extends { id: number }>({
   columns,
   data,
 }: {
@@ -22,7 +22,7 @@ export const AppTable = <T extends {}>({
       <thead>
         <tr>
           {columns.map((c) => (
-            <th className="py-4" align="left">
+            <th key={c.accessor} className="py-4" align="left">
               {c.label}
             </th>
           ))}
@@ -31,9 +31,9 @@ export const AppTable = <T extends {}>({
 
       <tbody>
         {data.map((item) => (
-          <tr>
+          <tr key={item.id}>
             {columns.map((c) => (
-              <td className="py-1 border-b border-black/5">
+              <td key={c.accessor} className="py-1 border-b border-black/5">
                 {c.element
                   ? c.element(item)
                   : (item[c.accessor as keyof typeof item] as ReactNode)}

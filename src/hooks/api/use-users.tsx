@@ -54,7 +54,6 @@ export const useCreateUser = ({
       onSuccess?.();
     },
     onError(err) {
-      console.log(err);
       onError?.();
     },
   });

@@ -1,2 +1,2 @@
-export * from '.';
+export * from './Table';
 export * from './TablePagination';
