@@ -80,7 +80,7 @@ export const useUpdateUser = ({
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       onSuccess?.();
     },
-    onError(err) {
+    onError() {
       onError?.();
     },
   });
