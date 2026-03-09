@@ -6,7 +6,8 @@ import { Link } from 'react-router';
 import { FetchErrorState } from '../components/FetchErrorState';
 import { RotatingLines } from 'react-loader-spinner';
 import { UpdateUserButton } from '../components/EditUserButton';
-import { AppTable, type TableColumn } from '../components/table/Table';
+import { AppTable } from '../components/table/Table';
+import type { TableColumn } from '../components/table/Table';
 import { TablePagination } from '../components/table/TablePagination';
 
 const columns: TableColumn<User>[] = [
