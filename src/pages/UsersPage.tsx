@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import { FetchErrorState } from '../components/FetchErrorState';
 import { RotatingLines } from 'react-loader-spinner';
 import { UpdateUserButton } from '../components/EditUserButton';
-import { AppTable, type TableColumn } from '../components/table';
+import { AppTable, type TableColumn } from '../components/table/table';
 import { TablePagination } from '../components/table';
 
 const columns: TableColumn<User>[] = [
@@ -16,11 +16,7 @@ const columns: TableColumn<User>[] = [
     label: 'Avatar',
     accessor: 'avatar',
     element(u) {
-      return (
-        <div className="w-20 h-20 bg-black/5">
-          <img className="w-full h-full" src={u.avatar} alt={u.first_name} />
-        </div>
-      );
+      return <img className="w-20" src={u.avatar} alt={u.first_name} />;
     },
   },
   { label: 'Email', accessor: 'email' },

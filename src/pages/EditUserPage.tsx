@@ -46,12 +46,11 @@ export const EditUserPage = () => {
           <FetchErrorState onRetry={() => refetch()} />
         ) : (
           <UserForm
-            type="edit"
             initialFormData={{
-              firstName: user?.first_name as string,
-              lastName: user?.last_name as string,
-              email: user?.email as string,
-              avatar: user?.avatar as string,
+              firstName: user?.first_name!,
+              lastName: user?.last_name!,
+              email: user?.email!,
+              avatar: user?.avatar!,
             }}
             onSubmit={(value) =>
               updateUser({
