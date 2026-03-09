@@ -12,7 +12,7 @@ export const AddUserPage = () => {
       navigate('/users');
     },
     onError: () => {
-      toast.error('User created successfully.');
+      toast.error('An error occurred while creating the user.');
     },
   });
 
