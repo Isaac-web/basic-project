@@ -1,16 +1,13 @@
 import { useFetchUsers } from '../hooks/api/use-users';
 import type { User } from '../types';
-import {
-  AppTable,
-  TablePagination,
-  type TableColumn,
-} from '../components/table';
 import { usePaginationParams } from '../hooks/use-pagination-params';
 import { DeleteUserButton } from '../components/DeleteUserButton';
 import { Link } from 'react-router';
 import { FetchErrorState } from '../components/FetchErrorState';
 import { RotatingLines } from 'react-loader-spinner';
 import { UpdateUserButton } from '../components/EditUserButton';
+import { AppTable, type TableColumn } from '../components/table/table';
+import { TablePagination } from '../components/table';
 
 const columns: TableColumn<User>[] = [
   { label: 'First Name', accessor: 'first_name' },
